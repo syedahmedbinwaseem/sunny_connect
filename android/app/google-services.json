@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "101741312133",
+    "project_id": "sunny-connect",
+    "storage_bucket": "sunny-connect.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:101741312133:android:b7a15bcc87d8a68a2f11ec",
+        "android_client_info": {
+          "package_name": "com.kashifapps.sunny_connect"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "101741312133-u7sv9on4va7jntrgludljalpac2p2ti0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kashifapps.sunny_connect",
+            "certificate_hash": "44cc9dfee8c8542fef0f9716be579b2ad3a41155"
+          }
+        },
+        {
+          "client_id": "101741312133-873t1g1d8i0emulg3ni0gsfehseanfh5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5o03VvH9uiFo-9fnJJAnaNItlqZOVJu0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "101741312133-873t1g1d8i0emulg3ni0gsfehseanfh5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
