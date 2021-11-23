@@ -138,7 +138,7 @@ class _RegisterSchoolState extends State<RegisterSchool>
                 Padding(
                   padding: const EdgeInsets.only(right: 20, top: 7),
                   child: Utilities.textField(
-                      AppLocalizations.of(context).password,
+                      AppLocalizations.of(context).username,
                       false,
                       TextInputAction.next,
                       name,

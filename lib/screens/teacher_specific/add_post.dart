@@ -185,6 +185,8 @@ class _AddPostState extends State<AddPost> with WidgetsBindingObserver {
                       String url = await DatabaseServie.uploadFile(
                           CurrentAppUser.currentUserData.uid, file);
                       if (url != null) {
+                        String extension_ =
+                            file.path.toString().split('.').last.toString();
                         bool res = await Post.addNewPost(
                             description.text,
                             CurrentAppUser.currentUserData.uid,
@@ -193,7 +195,7 @@ class _AddPostState extends State<AddPost> with WidgetsBindingObserver {
                             url,
                             'file',
                             false,
-                            file.path.toString().split('.').last.toString());
+                            extension_.contains('/') ? '' : extension_);
                         if (res) {
                           NotificationManager().sendAndRetrieveMessage(
                               widget.appClass.id,

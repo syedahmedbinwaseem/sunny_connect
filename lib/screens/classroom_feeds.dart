@@ -10,9 +10,11 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:sunny_connect/modals/app_class.dart';
 import 'package:sunny_connect/modals/app_post.dart';
 import 'package:sunny_connect/modals/users/current_app_user.dart';
+import 'package:sunny_connect/screens/files_viewer/pdf_view.dart';
 import 'package:sunny_connect/screens/teacher_specific/add_post.dart';
 import 'package:sunny_connect/services/database_service.dart';
 import 'package:sunny_connect/src/constants/database_strings.dart';
@@ -20,10 +22,13 @@ import 'package:sunny_connect/utils/app_navigator.dart';
 import 'package:sunny_connect/utils/widgets.dart';
 import 'package:sunny_connect/utils/colors.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
-
-import '../test_video.dart';
+import 'package:open_file/open_file.dart';
+import 'files_formats.dart';
+import 'files_viewer/audio_player.dart';
+import 'files_viewer/test_video.dart';
 
 class ClassRoomScreen extends StatefulWidget {
   ClassRoomScreen({Key key, @required this.appClass}) : super(key: key);
@@ -36,22 +41,27 @@ class ClassRoomScreen extends StatefulWidget {
 class _ClassRoomScreenState extends State<ClassRoomScreen> {
   Dio dio = Dio();
   bool isLoading;
-  List<String> videoFormats = [
-    'avi',
-    'mp4',
-    'mov',
-    'wmv',
-    'flv',
-    'avi',
-    'avchd',
-    'webm',
-    'mkv'
-  ];
 
+  Directory directory;
   @override
   void initState() {
     isLoading = false;
+    _getDirectory();
     super.initState();
+  }
+
+  _getDirectory() async {
+    setState(() {
+      isLoading = true;
+    });
+    await Permission.storage.request();
+    directory = Platform.isAndroid
+        ? Directory(await ExtStorage.getExternalStoragePublicDirectory(
+            ExtStorage.DIRECTORY_DOWNLOADS))
+        : await getApplicationDocumentsDirectory();
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
@@ -123,12 +133,12 @@ class _ClassRoomScreenState extends State<ClassRoomScreen> {
                                     fontStyle: FontStyle.italic,
                                   )));
                         }
-
                         return Column(
                           children: snapshot.data.docs
                               .map((DocumentSnapshot document) {
                             Map<String, dynamic> data =
                                 document.data() as Map<String, dynamic>;
+
                             return topCard(MediaQuery.of(context).size.height,
                                 MediaQuery.of(context).size.width, data);
                           }).toList(),
@@ -150,6 +160,7 @@ class _ClassRoomScreenState extends State<ClassRoomScreen> {
 
   Widget topCard(double height, double width, Map<String, dynamic> data) {
     Post post = Post.fromMap(data);
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5),
       child: GestureDetector(
@@ -228,20 +239,13 @@ class _ClassRoomScreenState extends State<ClassRoomScreen> {
   }
 
   Widget _filePart(Post post, double height, double width) {
-    final videoPlayerController = VideoPlayerController.network(
-        'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4');
-
+    String str = 'File_SC_${post.id}';
+    String fPath = '${directory.path}/$str.${post.fileExtension}';
+    File file = File(fPath);
+    bool fileDownloaded = file.existsSync();
     print('Here we got:::: FILE TYPE ::: ${post.fileExtension}');
-    ChewieController chewieController;
+
     return StatefulBuilder(builder: (context, setState2) {
-      // videoPlayerController.initialize().then((d) {
-      //   final chewieController = ChewieController(
-      //     videoPlayerController: videoPlayerController,
-      //     autoPlay: true,
-      //     looping: false,
-      //   );
-      //   setState2(() {});
-      // });
       return Container(
         child: post.postType == 'file'
             ? (post.fileType == 'image'
@@ -256,53 +260,90 @@ class _ClassRoomScreenState extends State<ClassRoomScreen> {
                       errorWidget: (context, url, error) => Icon(Icons.person),
                     ),
                   )
-                : videoFormats.contains(post.fileExtension)
+                : videoFormats.contains(post.fileExtension.toLowerCase())
                     ? Container(
                         //
                         //Video Player Here
                         child: VideoItem(post.fileUrl))
-                    : Align(
-                        alignment: Alignment.centerRight,
-                        child: GestureDetector(
-                          onTap: () {
-                            downloadFile_(
-                                context, post.fileUrl, post.fileExtension);
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                color: primaryBlue),
-                            height: width * 0.07,
-                            width: width * 0.26,
-                            child: Center(
-                              child: Text(AppLocalizations.of(context).download,
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                  )),
-                            ),
-                          ),
-                        ),
-                      ))
+                    : audioFormats.contains(post.fileExtension.toUpperCase())
+                        ? Container(
+                            //
+                            //Video Player Here
+                            child: AppAudioPlayer(post.fileUrl))
+                        : 'pdf' == post.fileExtension.toLowerCase()
+                            ? Container(
+                                height: 200,
+                                child: Stack(
+                                  fit: StackFit.expand,
+                                  children: [
+                                    Container(
+                                        child:
+                                            SfPdfViewer.network(post.fileUrl)),
+                                    Align(
+                                      alignment: Alignment.bottomRight,
+                                      child: MaterialButton(
+                                          color: primaryBlue,
+                                          onPressed: () {
+                                            AppNavigator.push(context,
+                                                AppPDFView(url: post.fileUrl));
+                                          },
+                                          child: Text('Open',
+                                              style: TextStyle(
+                                                  color: Colors.white))),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            : Align(
+                                alignment: Alignment.centerRight,
+                                child: GestureDetector(
+                                  onTap: () async {
+                                    if (!fileDownloaded) {
+                                      downloadFile_(
+                                          context, post.fileUrl, file);
+                                    } else {
+                                      print("Here we got :::: ${file.path}");
+                                      OpenResult res =
+                                          await OpenFile.open(file.path);
+                                      if (res.message.toLowerCase() != 'done') {
+                                        Utilities.showInfoDialog(
+                                            context, "Error", res.message);
+                                      }
+                                    }
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(5),
+                                        color: primaryBlue),
+                                    height: width * 0.07,
+                                    width: width * 0.26,
+                                    child: Center(
+                                      child: Text(
+                                          fileDownloaded
+                                              ? 'Open'
+                                              : AppLocalizations.of(context)
+                                                  .download,
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                          )),
+                                    ),
+                                  ),
+                                ),
+                              ))
             : const SizedBox.shrink(),
       );
     });
   }
 
-  downloadFile_(BuildContext context, String url, String extension) async {
+  downloadFile_(BuildContext context, String url, File file) async {
     try {
       setState(() {
         isLoading = true;
       });
-      Directory directory = Platform.isAndroid
-          ? Directory(await ExtStorage.getExternalStoragePublicDirectory(
-              ExtStorage.DIRECTORY_DOWNLOADS))
-          : await getApplicationDocumentsDirectory();
-      String str =
-          'File_SC_${DateTime.now().year}_${DateTime.now().month}_${DateTime.now().day}_${DateTime.now().hour}_${DateTime.now().minute}_${DateTime.now().second}';
+
       // Directory directory2 = Directory(directory.path);
 
-      bool res = await DatabaseServie.downloadFile(
-          context, url, '${directory.path}/$str.$extension');
+      bool res = await DatabaseServie.downloadFile(context, url, file.path);
       setState(() {
         isLoading = false;
       });

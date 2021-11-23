@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:path/path.dart' as p;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -29,8 +29,7 @@ class DatabaseServie {
   static Future<String> uploadFile(String userId, File image) async {
     try {
       TaskSnapshot task = await FirebaseStorage.instance
-          .ref(
-              'posts/${userId.toString() + '_' + Timestamp.now().toString()}.png')
+          .ref('posts/${image.path.split('/').last}')
           .putFile(image);
       String url = await task.ref.getDownloadURL();
       return url;

@@ -60,7 +60,11 @@ dependencies:
   encrypt: ^5.0.1
   video_player: ^2.2.7
   chewie: ^1.2.2
+  chewie_audio: ^1.2.0
+  syncfusion_flutter_pdfviewer: ^19.3.54-beta
+  open_file: ^3.2.1
   # flutter_downloader: ^1.7.1
+
 
 dev_dependencies:
   flutter_lints: ^1.0.0
