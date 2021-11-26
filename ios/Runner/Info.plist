@@ -39,7 +39,13 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>GADApplicationIdentifier</key>
+		<string>ca-app-pub-9557177675104096~1120516181</string>
+	<key>NSUserTrackingUsageDescription</key>
+		<string>This identifier will be used to deliver personalized ads to you.</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<key>io.flutter.embedded_views_preview</key>
+	<true/>
 	<false/>
 </dict>
 </plist>

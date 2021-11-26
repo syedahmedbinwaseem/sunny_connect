@@ -5,6 +5,7 @@ import 'package:sunny_connect/modals/users/current_app_user.dart';
 import 'package:sunny_connect/provider/languages_manager.dart';
 import 'package:sunny_connect/screens/admin_specific/add_new_teacher.dart';
 import 'package:sunny_connect/screens/admin_specific/teachers_admin.dart';
+import 'package:sunny_connect/utils/ads_manager.dart';
 import 'package:sunny_connect/utils/app_navigator.dart';
 import 'package:sunny_connect/utils/colors.dart';
 import 'package:sunny_connect/utils/widgets.dart';
@@ -31,6 +32,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
+      bottomNavigationBar: AdManagerClass.bannerAd(),
       backgroundColor: primaryBlue,
       body: SingleChildScrollView(
         child: Column(

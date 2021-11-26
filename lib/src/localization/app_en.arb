@@ -74,5 +74,8 @@
   "add_class_text": "Add your class here, and share Class Name and Code with your friends to join!",
   "description": "description",
   "class_added_title": "New Class Added",
-  "class_added_text": "Kindly share Class name and Class code with your students to join!"
+  "class_added_text": "Kindly share Class name and Class code with your students to join!",
+  "comment________________________________________Nofitications_____________________________________________": "*****************",
+  "post_new_announcement_title" : "posted new announcement in"
+
 }

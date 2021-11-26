@@ -7,6 +7,7 @@ import 'package:sunny_connect/screens/admin_specific/admin_profile.dart';
 import 'package:sunny_connect/screens/student_specfic/student_classrooms.dart';
 import 'package:sunny_connect/screens/student_specfic/student_home.dart';
 import 'package:sunny_connect/screens/student_specfic/student_profile.dart';
+import 'package:sunny_connect/utils/ads_manager.dart';
 import 'package:sunny_connect/utils/app_navigator.dart';
 import 'package:sunny_connect/utils/colors.dart';
 import 'package:sunny_connect/utils/widgets.dart';
@@ -26,6 +27,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
+      bottomNavigationBar: AdManagerClass.bannerAd(),
       backgroundColor: primaryBlue,
       body: Column(
         children: [topContainer(height, width), bottomContainer(height, width)],

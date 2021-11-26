@@ -55,7 +55,7 @@
 //     _localRenderer.dispose();
 //     _remoteRenderer.dispose();
 //     super.dispose();
-//   }
+//   }  
 
 //   @override
 //   Widget build(BuildContext context) {
@@ -147,6 +147,7 @@
 //   }
 // }
 
+import 'package:admob_flutter/admob_flutter.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -159,6 +160,7 @@ import 'provider/languages_manager.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  Admob.initialize();
   await Firebase.initializeApp();
   AppLanguage appLanguage = AppLanguage();
   await appLanguage.fetchLocale();

@@ -18,6 +18,7 @@ import 'package:sunny_connect/screens/files_viewer/pdf_view.dart';
 import 'package:sunny_connect/screens/teacher_specific/add_post.dart';
 import 'package:sunny_connect/services/database_service.dart';
 import 'package:sunny_connect/src/constants/database_strings.dart';
+import 'package:sunny_connect/utils/ads_manager.dart';
 import 'package:sunny_connect/utils/app_navigator.dart';
 import 'package:sunny_connect/utils/widgets.dart';
 import 'package:sunny_connect/utils/colors.dart';
@@ -71,7 +72,8 @@ class _ClassRoomScreenState extends State<ClassRoomScreen> {
     return ModalProgressHUD(
       inAsyncCall: isLoading,
       child: Scaffold(
-        backgroundColor: Colors.white,
+        bottomNavigationBar: AdManagerClass.bannerAd(),
+        backgroundColor: Colors.red,
         appBar: AppBar(
           title: Text('${widget.appClass.name} '),
           backgroundColor: primaryBlue,

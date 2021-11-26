@@ -3,7 +3,7 @@ import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:sunny_connect/modals/app_post.dart';
 import 'package:sunny_connect/modals/users/current_app_user.dart';
-import 'package:sunny_connect/services/NotificationManager/pushNotificationManager.dart';
+import 'package:sunny_connect/services/NotificationManager/push_notification_manager.dart';
 import 'package:sunny_connect/signaling.dart';
 import 'package:sunny_connect/utils/field_validator.dart';
 import 'package:sunny_connect/utils/widgets.dart';

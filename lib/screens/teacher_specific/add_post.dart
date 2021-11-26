@@ -12,7 +12,7 @@ import 'package:sunny_connect/screens/classroom_feeds.dart';
 import 'package:sunny_connect/screens/teacher_specific/start_streaming.dart';
 import 'package:sunny_connect/screens/teacher_specific/teacher_dashboard.dart';
 import 'package:sunny_connect/screens/teacher_specific/teacher_streaming.dart';
-import 'package:sunny_connect/services/NotificationManager/pushNotificationManager.dart';
+import 'package:sunny_connect/services/NotificationManager/push_notification_manager.dart';
 import 'package:sunny_connect/services/database_service.dart';
 import 'package:sunny_connect/utils/app_navigator.dart';
 import 'package:sunny_connect/utils/field_validator.dart';
@@ -170,7 +170,7 @@ class _AddPostState extends State<AddPost> with WidgetsBindingObserver {
                             AppLocalizations.of(context).post_published_text);
                         NotificationManager().sendAndRetrieveMessage(
                             widget.appClass.id,
-                            '${CurrentAppUser.currentUserData.name} - posted new announcement in : ${widget.appClass.name}',
+                            '${CurrentAppUser.currentUserData.name} - ${AppLocalizations.of(context).post_new_announcement_title} : ${widget.appClass.name}',
                             '${CurrentAppUser.currentUserData.name} : ${widget.appClass.name} -- ${description.text}');
                         AppNavigator.pop(context);
                         setState(() {
@@ -199,7 +199,7 @@ class _AddPostState extends State<AddPost> with WidgetsBindingObserver {
                         if (res) {
                           NotificationManager().sendAndRetrieveMessage(
                               widget.appClass.id,
-                              '${CurrentAppUser.currentUserData.name} - posted new announcement in : ${widget.appClass.name}',
+                              '${CurrentAppUser.currentUserData.name} - ${AppLocalizations.of(context).post_new_announcement_title} : ${widget.appClass.name}',
                               '${CurrentAppUser.currentUserData.name} : ${widget.appClass.name} -- ${description.text} & uploaded a file.');
                           await Utilities.showInfoDialog(
                             context,
